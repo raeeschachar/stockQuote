@@ -12,7 +12,7 @@ def root():
     querystring = {"function": "GLOBAL_QUOTE", "symbol": "MSFT", "datatype": "json"}
 
     headers = {
-        "X-RapidAPI-Key": "c4724e8bcdmsh4020992793038cep126cfcjsn8a30b8c08836",
+        "X-RapidAPI-Key": "API-KEY",
         "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com"
     }
 
