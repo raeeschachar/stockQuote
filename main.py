@@ -11,7 +11,7 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
-class DataPriceBase(BaseModel):
+class PriceData(BaseModel):
     symbol: str
     open: float
     high: float
@@ -45,19 +45,19 @@ def root():
     quote_response = response.json()
 
     # Add data to DB
-    db_quote_data = models.PriceData(symbol=quote_response.get("01. symbol"),
-                                     open=quote_response.get("02. open"),
-                                     high=quote_response.get("03. high"),
-                                     low=quote_response.get("04. low"),
-                                     price=quote_response.get("05. price"),
-                                     volume=quote_response.get("06. volume"),
-                                     latest_trading_day=quote_response.get("07. latest trading day"),
-                                     previous_close=quote_response.get("08. previous close"),
-                                     change=quote_response.get("09. change"),
-                                     change_percentage=quote_response.get("10. change percent")
-                                     )
+    db_quote_data = models.PriceData(
+        symbol=quote_response["Global Quote"].get("01. symbol"),
+        open=quote_response["Global Quote"].get("02. open"),
+        high=quote_response["Global Quote"].get("03. high"),
+        low=quote_response["Global Quote"].get("04. low"),
+        price=quote_response["Global Quote"].get("05. price"),
+        volume=quote_response["Global Quote"].get("06. volume"),
+        latest_trading_day=quote_response["Global Quote"].get("07. latest trading day"),
+        previous_close=quote_response["Global Quote"].get("08. previous close"),
+        change=quote_response["Global Quote"].get("09. change"),
+        change_percentage=quote_response["Global Quote"].get("10. change percent")
+        )
     db.add(db_quote_data)
     db.commit()
-    print(db_quote_data)
 
     return quote_response
