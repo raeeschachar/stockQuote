@@ -1,2 +1,6 @@
-fastapi
+fastapi~=0.104.1
 uvicorn
+sqlalchemy~=2.0.23
+psycopg2-binary
+requests~=2.31.0
+pydantic~=2.5.0
