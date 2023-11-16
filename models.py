@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Float, Double, Integer
+from sqlalchemy import Column, String, Float, Double, Integer, Date
 from database import Base
 
 
@@ -12,7 +12,7 @@ class PriceData(Base):
     low = Column(Float)
     price = Column(Float)
     volume = Column(Double)
-    latest_trading_day = Column(DateTime)
+    latest_trading_day = Column(Date)
     previous_close = Column(Float)
     change = Column(Float)
     change_percentage = Column(String)

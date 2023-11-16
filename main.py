@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import date
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import requests
 from pydantic import BaseModel
 
@@ -18,7 +18,7 @@ class PriceData(BaseModel):
     low: float
     price: float
     volume: int
-    latest_trading_day: datetime
+    latest_trading_day: date
     previous_close: float
     change: float
     change_percentage: float
@@ -31,7 +31,7 @@ db = SessionLocal()
 
 
 @app.get("/stock/quote")
-def root():
+def get_stock_quote():
     url = "https://alpha-vantage.p.rapidapi.com/query"
 
     querystring = {"function": "GLOBAL_QUOTE", "symbol": "MSFT", "datatype": "json"}
@@ -61,3 +61,14 @@ def root():
     db.commit()
 
     return quote_response
+
+
+@app.get("/stock/price/{provided_symbol}/{provided_trading_day}")
+async def get_stock_price(provided_symbol, provided_trading_day):
+    result = db.query(models.PriceData).filter(
+        models.PriceData.symbol == provided_symbol,
+        models.PriceData.latest_trading_day == provided_trading_day
+    ).all()
+    if not result:
+        raise HTTPException(status_code=404, detail='Symbol not found!')
+    return result
