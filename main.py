@@ -1,8 +1,10 @@
+import os
 from datetime import date
 
 from fastapi import FastAPI, HTTPException
 import requests
 from pydantic import BaseModel
+from dotenv import load_dotenv
 
 import models
 from database import engine, SessionLocal
@@ -28,16 +30,21 @@ class PriceData(BaseModel):
 
 
 db = SessionLocal()
+load_dotenv()
+
+rapid_key = os.getenv('RAPID_API_KEY')
 
 
 @app.get("/stock/quote")
-def get_stock_quote():
+def get_stock_quote(query_string=None):
+    if query_string is None:
+        query_string = {"function": "GLOBAL_QUOTE", "symbol": "MSFT", "datatype": "json"}
     url = "https://alpha-vantage.p.rapidapi.com/query"
 
-    querystring = {"function": "GLOBAL_QUOTE", "symbol": "MSFT", "datatype": "json"}
+    querystring = query_string
 
     headers = {
-        "X-RapidAPI-Key": "ADD-KEY",
+        "X-RapidAPI-Key": f"{rapid_key}",
         "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com"
     }
 
